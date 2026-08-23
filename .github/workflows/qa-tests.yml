@@ -23,4 +23,4 @@ jobs:
           cache: maven
 
       - name: Run QA automation tests
-        run: mvn --batch-mode clean test -Denv=qa
+        run: mvn --batch-mode clean test -Denv=qa -Dsurefire.suiteXmlFiles=testng-ci.xml
