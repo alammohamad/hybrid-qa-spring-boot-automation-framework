@@ -115,6 +115,8 @@
 package com.hybrid.driver;
 
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -141,17 +143,43 @@ public class WebDriverFactory {
 
         switch (browser.toLowerCase()) {
 
+//        case "chrome":
+//
+//            WebDriverManager.chromedriver().setup();
+//
+//            return new ChromeDriver();
+        
         case "chrome":
 
             WebDriverManager.chromedriver().setup();
 
-            return new ChromeDriver();
+            ChromeOptions chromeOptions = new ChromeOptions();
 
+            if ("true".equalsIgnoreCase(System.getenv("GITHUB_ACTIONS"))) {
+                chromeOptions.addArguments("--headless");
+                chromeOptions.addArguments("--no-sandbox");
+                chromeOptions.addArguments("--disable-dev-shm-usage");
+            }
+
+            return new ChromeDriver(chromeOptions);
+
+//        case "firefox":
+//
+//            WebDriverManager.firefoxdriver().setup();
+//
+//            return new FirefoxDriver();
+            
         case "firefox":
 
             WebDriverManager.firefoxdriver().setup();
 
-            return new FirefoxDriver();
+            FirefoxOptions firefoxOptions = new FirefoxOptions();
+
+            if ("true".equalsIgnoreCase(System.getenv("GITHUB_ACTIONS"))) {
+                firefoxOptions.addArguments("-headless");
+            }
+
+            return new FirefoxDriver(firefoxOptions);
 
         case "edge":
 
