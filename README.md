@@ -22,7 +22,7 @@ The project uses the OrangeHRM demo application as the current UI automation tar
 * Centralized WebDriver configuration
 * Positive and negative test scenarios
 * Git/GitHub source-code management
-
+GitHub Actions runs the CI TestNG suite on pushes to the main branch.
 ---
 
 ## Technology Stack
