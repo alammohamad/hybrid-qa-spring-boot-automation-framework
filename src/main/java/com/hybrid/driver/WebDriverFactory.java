@@ -169,13 +169,31 @@ public class WebDriverFactory {
 //
 //            return new FirefoxDriver();
             
+//        case "firefox":
+//
+//            WebDriverManager.firefoxdriver().setup();
+//
+//            FirefoxOptions firefoxOptions = new FirefoxOptions();
+//
+//            //if ("true".equalsIgnoreCase(System.getenv("GITHUB_ACTIONS"))) {
+//            if ("true".equalsIgnoreCase(System.getenv("GITHUB_ACTIONS"))
+//                    || "true".equalsIgnoreCase(System.getenv("CI_HEADLESS"))) {
+//                firefoxOptions.addArguments("-headless");
+//            }
+//
+//            return new FirefoxDriver(firefoxOptions);
+            
         case "firefox":
 
             WebDriverManager.firefoxdriver().setup();
 
             FirefoxOptions firefoxOptions = new FirefoxOptions();
 
-            if ("true".equalsIgnoreCase(System.getenv("GITHUB_ACTIONS"))) {
+            firefoxOptions.setBinary(
+                "C:\\Program Files\\Mozilla Firefox\\firefox.exe"
+            );
+
+            if ("true".equalsIgnoreCase(System.getenv("CI_HEADLESS"))) {
                 firefoxOptions.addArguments("-headless");
             }
 
