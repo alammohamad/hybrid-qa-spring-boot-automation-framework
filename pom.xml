@@ -84,7 +84,7 @@
         <dependency>
             <groupId>io.github.bonigarcia</groupId>
             <artifactId>webdrivermanager</artifactId>
-            <version>5.8.0</version>
+            <version>6.3.3</version>
         </dependency>
 
 
@@ -144,44 +144,37 @@
             <!-- ========================= -->
 
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.5.6</version>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-surefire-plugin</artifactId>
+    <version>3.5.6</version>
 
-                <dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.maven.surefire</groupId>
+            <artifactId>surefire-testng</artifactId>
+            <version>3.5.6</version>
+        </dependency>
+    </dependencies>
 
-                    <dependency>
-                        <groupId>org.apache.maven.surefire</groupId>
-                        <artifactId>surefire-testng</artifactId>
-                        <version>3.5.6</version>
-                    </dependency>
+    <configuration>
 
-                </dependencies>
+    <systemPropertyVariables>
+        <spring.profiles.active>${env}</spring.profiles.active>
+    </systemPropertyVariables>
 
-                <configuration>
+    <properties>
+        <property>
+            <name>groups</name>
+            <value>${groups}</value>
+        </property>
+    </properties>
 
-                    <!-- Pass active Spring profile -->
-                    <systemPropertyVariables>
+    <suiteXmlFiles>
+        <suiteXmlFile>testng.xml</suiteXmlFile>
+    </suiteXmlFiles>
 
-                        <spring.profiles.active>
-                            ${env}
-                        </spring.profiles.active>
-
-                    </systemPropertyVariables>
-
-
-                    <!-- TestNG suite -->
-                    <suiteXmlFiles>
-
-                        <suiteXmlFile>
-                            testng.xml
-                        </suiteXmlFile>
-
-                    </suiteXmlFiles>
-
-                </configuration>
-
-            </plugin>
+</configuration>
+</plugin>
 
         </plugins>
 

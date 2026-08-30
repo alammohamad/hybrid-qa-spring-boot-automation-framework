@@ -206,9 +206,20 @@ public class ExtentTestListener implements ITestListener {
     @Override
     public void onTestStart(ITestResult result) {
 
-        String testName =
-                result.getMethod().getMethodName();
-
+//    	String testName =
+//    	        result.getMethod().getDescription();
+//    	if (testName == null || testName.trim().isEmpty()) {
+//    	    testName = result.getMethod().getMethodName();
+//    	}
+//
+//    	System.out.println("===== REPORT TEST NAME =====");
+//    	System.out.println("Method Name: " + result.getMethod().getMethodName());
+//    	System.out.println("Description: " + result.getMethod().getDescription());
+//    	System.out.println("Final Test Name: " + testName);
+//    	System.out.println("============================");
+    	
+    	String testName = getTestName(result);
+    	
         ExtentTest test =
                 extent.createTest(testName);
 
@@ -227,6 +238,17 @@ public class ExtentTestListener implements ITestListener {
         }
 
         Object[] parameters = result.getParameters();
+        if (parameters != null && parameters.length >= 3) {
+
+            String expectedResult = parameters[2].toString();
+
+            if ("success".equalsIgnoreCase(expectedResult)) {
+                testName = "Login with valid credentials";
+            } else if ("failure".equalsIgnoreCase(expectedResult)) {
+                testName = "Login with invalid credentials";
+            }
+        }
+        
         String userId = parameters != null && parameters.length > 0
                 && parameters[0] != null ? parameters[0].toString() : "";
 
@@ -278,8 +300,11 @@ public class ExtentTestListener implements ITestListener {
         );
 
         String browser = getBrowser(result);
+//        ExtentManager.recordEnd(
+//                result.getMethod().getMethodName(), browser, "PASS");
         ExtentManager.recordEnd(
-                result.getMethod().getMethodName(), browser, "PASS");
+                getTestName(result), browser, "PASS");
+        
     }
 
 
@@ -294,8 +319,10 @@ public class ExtentTestListener implements ITestListener {
                         + result.getThrowable()
         );
 
+//        ExtentManager.recordEnd(
+//                result.getMethod().getMethodName(), getBrowser(result), "FAIL");
         ExtentManager.recordEnd(
-                result.getMethod().getMethodName(), getBrowser(result), "FAIL");
+                getTestName(result), getBrowser(result), "FAIL");
 
         try {
 
@@ -344,10 +371,13 @@ public class ExtentTestListener implements ITestListener {
                 "Test Skipped"
         );
 
-        ExtentManager.recordEnd(
-                result.getMethod().getMethodName(), getBrowser(result), "SKIPPED");
-    }
+//        ExtentManager.recordEnd(
+//                result.getMethod().getMethodName(), getBrowser(result), "SKIPPED"); 
 
+        ExtentManager.recordEnd(
+                getTestName(result), getBrowser(result), "SKIPPED");
+    }
+    
 //    private String getBrowser(ITestResult result) {
 //        String browser = result.getTestContext()
 //                .getCurrentXmlTest()
@@ -355,6 +385,44 @@ public class ExtentTestListener implements ITestListener {
 //        return browser == null ? "unknown" : browser;
 //    }
 
+//    private String getTestName(ITestResult result) {
+//
+//        String description = result.getMethod().getDescription();
+//
+//        if (description != null && !description.trim().isEmpty()) {
+//            return description;
+//        }
+//
+//        return result.getMethod().getMethodName();
+//    }
+    
+    private String getTestName(ITestResult result) {
+
+        Object[] parameters = result.getParameters();
+
+        if (parameters != null && parameters.length >= 3) {
+
+            String expectedResult = parameters[2].toString();
+
+            if ("success".equalsIgnoreCase(expectedResult)) {
+                return "Login with valid credentials";
+            }
+
+            if ("failure".equalsIgnoreCase(expectedResult)) {
+                return "Login with invalid credentials";
+            }
+        }
+
+        String description = result.getMethod().getDescription();
+
+        if (description != null && !description.trim().isEmpty()) {
+            return description;
+        }
+
+        return result.getMethod().getMethodName();
+    }
+    
+    
     private String getBrowser(ITestResult result) {
 
         if (result.getTestContext().getCurrentXmlTest() != null) {
