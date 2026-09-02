@@ -11,6 +11,9 @@ jobs:
   qa-tests:
     runs-on: ubuntu-latest
 
+    env:
+      CI_HEADLESS: true
+
     steps:
       - name: Checkout source code
         uses: actions/checkout@v6
