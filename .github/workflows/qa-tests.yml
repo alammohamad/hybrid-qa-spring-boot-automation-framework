@@ -1,3 +1,4 @@
+
 name: QA Automation Tests
 
 on:
@@ -27,3 +28,14 @@ jobs:
 
       - name: Run QA automation tests
         run: mvn --batch-mode clean test -Denv=qa -Dsurefire.suiteXmlFiles=testng-ci.xml
+
+      - name: Upload HTML test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: QA-Test-Reports
+          path: |
+            target/**/*.html
+            reports/**/*.html
+          if-no-files-found: warn
+          retention-days: 14
